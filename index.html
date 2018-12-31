@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Pizza Courier</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="meal">
+            <div class="header">
+                <img src="img/pizza_courier.jpg" alt="Your choice" width="210px" height="184px">
+                <h1>Pizza Courier</h1>
+            </div>
+            <div class="order">
+                <div class="pizza-list-wrapper">
+                    <ul class="pizza-list">
+                        <img src="img/pizza.jpeg" alt="Pizza" width="100px" height="100px">
+                    </ul>    
+                </div> 
+                <div class="beverage-list-wrapper">
+                    <ul class="beverage-list">
+                        <img src="img/beverage.jpeg" alt="Pizza" width="130px" height="100px">
+                    </ul>    
+                </div> 
+            </div>
+            
+            <div class="basket-wrapper">
+                <div class="basket-buttons">                   
+                    <button id="button-add-basket" class="basket">Add to Basket</button>
+                    <button id="button-clear-basket" class="basket">Clear Basket</button>
+                    <button id="button-pay" class="basket">PAY</button>
+                </div>
+                <div class="basket-list">
+                    <div class="show-price">
+                        <h3><u>Your Basket</u></h3>
+                        <h3 id="price"></h3>
+                    </div>
+                    <table class="show-order">   
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+    
+    <script src="./js/entity/Extra.js"></script>
+    <script src="./js/entity/Beverage.js"></script>
+    <script src="./js/entity/Pizza.js"></script>
+    <script src="./js/entity/OrderItem.js"></script>
+    <script src="./js/entity/Order.js"></script>
+    <script src="./js/helpers/BeverageFactory.js"></script>
+    <script src="./js/helpers/ExtraFactory.js"></script>
+    <script src="./js/helpers/PizzaFactory.js"></script>
+    <script src="./js/entity/SIZE.js"></script>
+    <script src="./js/entity/PIZZAKIND.js"></script>
+    <script src="./js/entity/BEVERAGEKIND.js"></script>
+    <script src="./js/app.js"></script>
+    <script src="./js/controller.js"></script>
+</body>
+</html>
