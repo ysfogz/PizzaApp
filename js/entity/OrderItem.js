@@ -9,10 +9,10 @@ class OrderItem {
         return new Date().getTime() - Math.floor(Math.random() * 1000);
     }
 
-    setCount(number) {
+    setCount(number) { // To add one set number 1, to sub one set number -1
         this.count += number;
     }
-    getCount() {
+    getCount() { 
         return this.count;
     }
 
@@ -25,7 +25,7 @@ class OrderItem {
     }
 
     getPrice() {
-        console.log("order Item", this.type.getPrice(), this.getCount())
+        //console.log("order Item", this.type.getPrice(), this.getCount())
         return this.type.getPrice() * this.getCount();
     }
 }

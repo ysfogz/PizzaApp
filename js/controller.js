@@ -17,11 +17,9 @@
 ;
 (function ($) {    
     
-    var currentPizza = '';
-    var currentBeverage = '';
-    var currentOrder = '';
-    var tableCount = 0;
-    var totalPrice = 0;
+    var currentPizza = undefined;
+    var currentBeverage = undefined;
+    var currentOrder = undefined;  
 
     function init() {
         setPizzaList();
@@ -33,6 +31,7 @@
         setBeverageListListener();
         setAddButtonListener();
         setClearBasketListener();
+        setCancelOrderItemListener()
         clearSelection();
     }
 
@@ -157,8 +156,8 @@
                 });
                 let pizza = new Pizza(currentPizza, SIZE.properties[pizzaSize].name);
                 pizza.addExtra(extras);
-                orderItem = new OrderItem(pizza);
-                addBasket(orderItem);
+                let orderItem = new OrderItem(pizza);
+                addOrder(orderItem);
             }
 
             if (currentBeverage) {
@@ -168,8 +167,8 @@
                     return;
                 }
                 let beverage = new Beverage(currentBeverage, SIZE.properties[beverageSize].name);
-                orderItem = new OrderItem(beverage);
-                addBasket(orderItem);
+                let orderItem = new OrderItem(beverage);
+                addOrder(orderItem);
             }
 
         })
@@ -184,36 +183,37 @@
     }
 
     function clearSelection() {
-        currentPizza = '';
+        currentPizza = undefined;
         $('input[name="e-item"]').prop('checked', false);
         $('input[name="psize"]').prop('checked', false);
         $(".lists-wrapper").hide();
 
-        currentBeverage = '';
+        currentBeverage = undefined;
         $('input[name="bsize"]').prop('checked', false);
         $(".beverage-size-list").hide();
 
-        currentOrder = '';
-        tableCount = 0;
-        totalPrice = 0;
+        currentOrder = undefined;
     }
 
-    function addBasket(orderItem) {
-        let backColor='';
-            if (tableCount %2 === 0) {
-                backColor = '#ac9393';
-            } else {
-                backColor = '#95aee4';
-            }
-            totalPrice += orderItem.getType().getPrice();
-            let htmlText =`<tr id=${tableCount} style="background-color:${backColor}">
-                <th colspan="2" style="text-align:left">${orderItem.getType().getName()}</th>
-                <th style="text-align:right">${orderItem.getType().getPrice()} chf</th>
-                <th style="text-align:right"><button id="button-cancel"></button>
+    function addBasket(orderArray) {
+        
+        $('.show-order').html('');
+
+        orderArray.map((orderItem, index) => {
+            let backColor = index % 2 === 0 ? '#ac9393' : '#95aee4';
+            let name = orderItem.getType().getName();
+            let quantity = orderItem.getCount();
+            let price = orderItem.getType().getPrice() * quantity;
+            let size = orderItem.getType().getSize();
+            let gross = orderItem.getType() instanceof Pizza ? SIZE.properties[SIZE[orderItem.getType().getSize()]].pizza :
+            SIZE.properties[SIZE[orderItem.getType().getSize()]].beverage;
+
+            let htmlText =`<tr id=${index} style="background-color:${backColor}">
+                <th colspan="2" style="text-align:left">${name} <span>${quantity > 1 ? "(x "+quantity.toString()+")" :""}</span></th>
+                <th style="text-align:right">${price} chf</th>
+                <th style="text-align:right"><button id=${index} class="button-cancel"></button>
             </tr>
-            <tr style="background-color:${backColor}"><td colspan="4">${orderItem.getType().getSize()} - 
-            ${orderItem.getType() instanceof Pizza ? SIZE.properties[SIZE[orderItem.getType().getSize()]].pizza :
-                SIZE.properties[SIZE[orderItem.getType().getSize()]].beverage}</td></tr>`;
+            <tr style="background-color:${backColor}"><td colspan="4">${size} - ${gross}</td></tr>`;
 
             let extras = orderItem.getType() instanceof Pizza ? orderItem.getType().getExtra() : undefined;
             if (extras) {
@@ -224,20 +224,32 @@
                 innerText +=`</td></tr>`;
                 htmlText += innerText;
             }
-            tableCount++;
-           
-        $('.show-order').prepend(htmlText);
+            $('.show-order').prepend(htmlText);
+        });
+
+        let totalPrice =  currentOrder.getPrice(); 
         $('#price').html(`${totalPrice} chf`);
     }
 
     function addOrder(orderItem) {
         if (!currentOrder) {
             currentOrder = new Order();
-            currentOrder.addItem(orderItem);
+            currentOrder.addItems(orderItem);
+            currentOrder.status = 'Ordering';
         } else {
             // once itemslerin oldugu dizi olsun. en son order olustururuz. Pay butonu olsun 1 tane.
-            currentOrder.addItem(orderItem);
+            currentOrder.addItems(orderItem);
         }
+
+        addBasket(currentOrder.getItems());
+    }
+
+    function setCancelOrderItemListener() {
+        $(".show-order").click('.button-cancel', function() {
+            let index = $(event.target).prop('id'); 
+            currentOrder.deleteItems(index);
+            addBasket(currentOrder.getItems());
+        });
     }
 
     init();

@@ -3,6 +3,14 @@ class Order {
         this.date = new Date();
         this.orderItems = [];
         this.orderId = this.getUniqId();
+        this.status = 'Unordered';
+    }
+
+    setStatus(value) {
+        this.status = value;
+    }
+    getStatus() {
+        return this.status;
     }
 
     // If an orderItem already exist so, increase the quantitiy of the order
@@ -17,6 +25,14 @@ class Order {
 
     getItems() {
         return this.orderItems;
+    }
+
+    deleteItems(index) {
+        if (this.orderItems[index].getCount() > 1) {
+            this.orderItems[index].setCount(-1);
+        } else {
+          this.orderItems.splice(index,1);  
+        }
     }
 
     getUniqId () {

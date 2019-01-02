@@ -141,8 +141,10 @@ li {
 #button-pay {
     background: url(../img/pay.png) round;
 }
-#button-cancel {
+.button-cancel {
     background: url(../img/cancel.png) round;
+    border: none;
+    cursor: pointer;
     width: 25px;
     height: 25px;
 }
@@ -161,7 +163,15 @@ table {
     width: 100%;
     margin-left: 10%;
     border: none;
-    border-spacing: 0px;
+    border-collapse:collapse;
+    border: spacing 0px;
+}
+th span {
+    color: red;
+}
+td {
+    padding: 0px;
+    margin: 0px;
 }
 
 .show-price {
