@@ -1,3 +1,8 @@
+
+/**
+ * Extas for pizza order
+ */
+
 class Extra {
     constructor(name, price){
         this.name = name;
@@ -21,7 +26,7 @@ class Extra {
         return this.extraId;
     }
 
-    // for OrderItem content
+    // to utilize OrderItem content to seperate extra order items
     getCode() {
         return this.name.slice(0,1);
     }

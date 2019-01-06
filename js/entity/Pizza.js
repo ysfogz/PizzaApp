@@ -36,6 +36,7 @@ class Pizza{
         return new Date().getTime() - Math.floor(Math.random() * 1000);
     }
 
+    // To get price according to pizza kind and its size. Then adds extas' prices
     getPrice(){
         return PIZZAKIND.properties[PIZZAKIND[this.name]][this.size] + this.getExtraPrice();
     }

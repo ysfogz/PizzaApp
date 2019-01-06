@@ -2,47 +2,47 @@ class ExtraFactory{
 
     getItem(param) {
         switch (param) {
-            case 'zeytin': return this.getZeytin();
-            case 'sucuk': return this.getSucuk(); 
-            case 'domates': return this.getDomates(); 
-            case 'ton': return this.getTon(); 
-            case 'mantar': return this.getMantar(); 
-            case 'enginar': return this.getEnginar(); 
+            case 'olive': return this.getOlive();
+            case 'sausage': return this.getSausage(); 
+            case 'tomato': return this.getTomato(); 
+            case 'fish': return this.getFish(); 
+            case 'mushroom': return this.getMushroom(); 
+            case 'artichoke': return this.getArtichoke(); 
             default: break;
         }
     }
-    getZeytin() {
-        return new Extra("zeytin", 2);
+    getOlive() {
+        return new Extra("olive", 2);
     }
 
-    getSucuk() {
-        return new Extra("sucuk", 5);
+    getSausage() {
+        return new Extra("sausage", 5);
     }
 
-    getDomates() {
-        return new Extra("domates", 3);
+    getTomato() {
+        return new Extra("tomato", 3);
     }
 
-    getTon() {
-        return new Extra("ton", 4);
+    getFish() {
+        return new Extra("fish", 4);
     }
 
-    getMantar() {
-        return new Extra("mantar", 1);
+    getMushroom() {
+        return new Extra("mushroom", 1);
     }
 
-    getEnginar() {
-        return new Extra("enginar", 4);
+    getArtichoke() {
+        return new Extra("artichoke", 4);
     }
     
     getAll() {
         return [
-            this.getDomates(),
-            this.getEnginar(),
-            this.getMantar(),
-            this.getSucuk(),
-            this.getTon(),
-            this.getZeytin()
+            this.getTomato(),
+            this.getArtichoke(),
+            this.getMushroom(),
+            this.getSausage(),
+            this.getFish(),
+            this.getOlive()
         ];
     }
 }

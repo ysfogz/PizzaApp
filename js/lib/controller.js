@@ -1,20 +1,12 @@
+
+
+
 /**
- * 
- * pizza listesi 
- * bir liste elemanina tiklaninca yeni bir pizza olumasi lazim
- * extra larin eklenecegi liste lazim
- * sepete ekle
- * icecekler select add deyince sepete ekle
- * her ekleme yapildiginda basketin update edilmesi gerek
- * 
- * -- pizza listesi
- *     -- pizza extralar
- * -- icecek listesi
- * -- basket
- * 
+ * Sets the eventlisteners of items on the view.
+ * Current and only entry point into Jquery.
  */
 
-;
+
 (function ($) {    
     
     var currentPizza = undefined;
@@ -26,7 +18,7 @@
         setExstraList();
         setBeverageList();
         setSizeList();
-    
+
         setPizzaListListener();
         setBeverageListListener();
         setAddButtonListener();
@@ -35,69 +27,11 @@
         clearSelection();
     }
 
-    function setPizzaList() {
-        const pizzas = new PizzaFactory();
-        let all = pizzas.getAll();
-        all = all.map(item => {
-            return `<li id="${PIZZAKIND.properties[item.getName()].name}" class="pizza-item">
-                        ${PIZZAKIND.properties[item.getName()].name} 
-                        <div class="lists-wrapper">
-                            <ul class="pizza-size-list">Sizes</ul>
-                            <ul class="exstra-list">Extras</ul>            
-                        </div>
-                    </li>`;
-        });
-        $(".pizza-list").append(all.join("").toString());
-    }
-    
-    function setBeverageList() {
-        const beverages = new BeverageFactory();
-        let all = beverages.getAll();
-        all = all.map(item => {
-            return `<li id="${item.getName()}" class="beverage-item">
-                        ${item.getName()} 
-                        <ul class ="beverage-size-list"></ul>
-                    </li>`;
-        });
-        $(".beverage-list").append(all.join("").toString());
-        $(".beverage-size-list").hide();
-    }
-    
-    function setExstraList() {
-        const extras = new ExtraFactory();
-        let all = extras.getAll();
-        all = all.map(item => {
-            return `<li id="${item.getName()}" class="extra-item">
-                        <input class="extra-item" type="checkbox" name="e-item" value="${item.getName()}">
-                        ${item.getName()} </input> 
-                    </li>`;
-        });
-        $(".exstra-list").append(all.join("").toString());
-    }
-    
-    function setSizeList() {
-        let allPizza = [];
-        let allBeverage = []; 
-    
-        for (let index = 0; index < Object.keys(SIZE).length-1; index++) { 
-            allPizza.push(`<li class="size-item"> 
-                            <input class="size-item" type="radio" name="psize" value="${index}">
-                            ${Object.keys(SIZE)[index]} - ${SIZE.properties[index].pizza}</input>
-                        </li>`);
-    
-            allBeverage.push(`<li class="size-item"> 
-                                <input class="size-item" type="radio" name="bsize" value="${index}">
-            ${Object.keys(SIZE)[index]} - ${SIZE.properties[index].beverage}</input>
-                         </li>`);
-            
-        }
-    
-        $(".pizza-size-list").append(allPizza.join(''));
-    
-        $(".beverage-size-list").append(allBeverage.join(''));
-        $(".beverage-size-list").hide();
-    }
-    
+    /**
+     * Pizza item's event listener. Clicking any pizza on the view, shows
+     * size and extra menus for clicked pizza inorder to select one size and
+     * a number of extras.
+     */
     function setPizzaListListener() {
         $(".lists-wrapper").hide();
         $(".pizza-list").click(() => {  
@@ -118,6 +52,10 @@
         })
     }
 
+    /**
+     * Beverage's event listener. Clicking any beverage on the view, shows
+     * size for clicked beverage inorder to select one size.
+     */
     function setBeverageListListener() {
         $(".beverage-size-list").hide();
         $(".beverage-list").click(() => {
@@ -138,6 +76,16 @@
     }
 
 
+    /**
+     * Finds selected pizza or beverage item and its selected extra and size items. 
+     * Having clicked it controls first if there is any order and the order is just finished. 
+     * This because to avoid any transaction during PAY animation time after PAY button is just clicked. 
+     * This animation takes 6700ms. Otherwise just quits function with a "return"; 
+     * 
+     * Then checks if the order is a pizza or beverage since processes are changes regarding the item
+     * 
+     * Finally calls "addOrder" function to add selected item to the basket.
+     */
     function setAddButtonListener() {
         $("#button-add-basket").click(() => {
             if (currentOrder && currentOrder.getStatus() === 'Ordered!') {
@@ -151,7 +99,7 @@
                 }
                 let extraArray = $(`#${currentPizza}`).find('input[name="e-item"]:checked').map(function() {
                     return this.value;
-                }).get();
+                }).get(); // get function makes an array from "map's" returned array-like object.  
                 
                 const extraFactory = new ExtraFactory();
                 let extras = extraArray.map(item => {
@@ -161,6 +109,7 @@
                 pizza.addExtra(extras);
                 let orderItem = new OrderItem(pizza);
                 addOrder(orderItem);
+                console.log(extraArray);
             }
 
             if (currentBeverage) {
@@ -177,6 +126,14 @@
         })
     }
 
+    /**
+     * Clears the basket and calls "clearSelection" function for unselecting extra and size
+     * radio- and checkboxes then re-initializing global variables.
+     * 
+     * Having clicked it controls first if there is any order and the order is just finished. 
+     * This because to avoid any transaction during PAY animation time after PAY button is just clicked. 
+     * This animation takes 6700ms. Otherwise just quits function with a "return"; 
+     */
     function setClearBasketListener() {
         $("#button-clear-basket").click(() => {
             if (currentOrder && currentOrder.getStatus() === 'Ordered!') {
@@ -187,9 +144,12 @@
             $('#price').html('0 chf');
         });
     }
-/**
- * Clears the basket
- */
+
+    /**
+     * Helper function for cleaning the basket and initializig current- Pizza, Beverage and 
+     * Order variables. Besides, this function clears all selections on extra and size lists of 
+     * pizza and beverage items.
+     */
     function clearSelection() {
         currentPizza = undefined;
         $('input[name="e-item"]').prop('checked', false);
@@ -204,6 +164,15 @@
 
     }
 
+    /**
+     * 
+     * @param {*} orderArray 
+     * Takes an array parameter to get "order items" and creates basket list view in a <table> element. Every time 
+     * it is called, re-create the view according to the parameter. The view shows ordered items and total price.
+     * 
+     * This function is not in the init file contary to create a view. Because it uses currentOrder global variable and
+     * it is not related first initializing of the web page rather related to dynamic view desing during application work.
+     */
     function addBasket(orderArray) {
         
         $('.show-order').html('');
@@ -240,6 +209,13 @@
         $('#price').html(`${totalPrice} chf`);
     }
 
+    /**
+     * 
+     * @param {*} orderItem 
+     * Takes a parameter to get a single order item. Firstly, it checks whether currentOrder item exis. If not 
+     * creates one and adds order item to the currentOrder. Then calls "addBasket" function to add order item 
+     * to the basket and basket view.
+     */
     function addOrder(orderItem) {
         if (!currentOrder) {
             currentOrder = new Order();
@@ -253,6 +229,11 @@
         addBasket(currentOrder.getItems());
     }
 
+    /**
+     * When clicking X button on the right of the each order in the basket list, this function deletes
+     * that order in the list or decrease its quantitiy of order calling "deleteItems" method of "Order" class.
+     * Then calls "addBasket" function to re-desing basket list view.
+     */
     function setCancelOrderItemListener() {
         $(".show-order").click('.button-cancel', function() {
             let index = $(event.target).prop('id'); 
@@ -261,28 +242,31 @@
         });
     }
 
+    /**
+     * This function realises payment and finishes order process showing an animation on the basket list view.
+     * This function is written directly not wrapped in a function. This is for diversifying of writing pattern. 
+     */
     $('#button-pay').click(function() {
         if (!currentOrder) {
             return;
         }
         currentOrder.setStatus('Ordered!');
+
         // animate content
         $('.show-order').addClass('animate_content');
-
         $('#price').delay(500).fadeOut('slow');
-        setTimeout(function() {
-            
-            $('.show-order').html($('.anime').html());
-          }, 1700);
+        setTimeout(function() {            
+            $('.show-order').html(`<th style="text-align:center">${$('.anime').html()}</th>`);
+            }, 1700);
 
         setTimeout(function() {
             clearSelection();
             $('#price').html('').fadeIn();
             $('.show-order').html('').fadeIn();
-           $('.show-order').removeClass('animate_content');
+            $('.show-order').removeClass('animate_content');
         }, 5000);
-      
-      });
+        
+        });
 
     init();
 
