@@ -105,7 +105,7 @@
             if (currentBeverage) {
                 $('input[name="bsize"]').prop('checked', false);
                 $(".beverage-size-list").hide();
-                currentBeverage = '';
+                currentBeverage = undefined;
             }
             // Set selection in pizza menu
             if (event.target.className === "pizza-item") {
@@ -126,7 +126,7 @@
                 $('input[name="e-item"]').prop('checked', false);
                 $('input[name="psize"]').prop('checked', false);
                 $(".lists-wrapper").hide();
-                currentPizza = '';
+                currentPizza = undefined;
             }
             // Set selection in beverage menu
             if(event.target.className === "beverage-item") {
@@ -140,6 +140,9 @@
 
     function setAddButtonListener() {
         $("#button-add-basket").click(() => {
+            if (currentOrder && currentOrder.getStatus() === 'Ordered!') {
+                return;
+            }
             if (currentPizza) {
                 let pizzaSize = $(`#${currentPizza}`).find('input[name="psize"]:checked').val();
                 if (!pizzaSize) {
@@ -176,12 +179,17 @@
 
     function setClearBasketListener() {
         $("#button-clear-basket").click(() => {
+            if (currentOrder && currentOrder.getStatus() === 'Ordered!') {
+                return;
+            }
             clearSelection();
             $('.show-order').html('');
-            $('#price').html('');
+            $('#price').html('0 chf');
         });
     }
-
+/**
+ * Clears the basket
+ */
     function clearSelection() {
         currentPizza = undefined;
         $('input[name="e-item"]').prop('checked', false);
@@ -193,6 +201,7 @@
         $(".beverage-size-list").hide();
 
         currentOrder = undefined;
+
     }
 
     function addBasket(orderArray) {
@@ -218,8 +227,8 @@
             let extras = orderItem.getType() instanceof Pizza ? orderItem.getType().getExtra() : undefined;
             if (extras) {
                 let innerText=`<tr style="background-color:${backColor}"><td colspan="4">`;
-                extras.map(item => {
-                    innerText +=`${item.getName()}, `;
+                extras.map((item, ind, arr) => {     
+                    innerText += arr.length -1 === ind ? `${item.getName()}` : `${item.getName()}, `;
                 });
                 innerText +=`</td></tr>`;
                 htmlText += innerText;
@@ -252,6 +261,30 @@
         });
     }
 
+    $('#button-pay').click(function() {
+        if (!currentOrder) {
+            return;
+        }
+        currentOrder.setStatus('Ordered!');
+        // animate content
+        $('.show-order').addClass('animate_content');
+
+        $('#price').delay(500).fadeOut('slow');
+        setTimeout(function() {
+            
+            $('.show-order').html($('.anime').html());
+          }, 1700);
+
+        setTimeout(function() {
+            clearSelection();
+            $('#price').html('').fadeIn();
+            $('.show-order').html('').fadeIn();
+           $('.show-order').removeClass('animate_content');
+        }, 5000);
+      
+      });
+
     init();
 
+    
 })(jQuery);

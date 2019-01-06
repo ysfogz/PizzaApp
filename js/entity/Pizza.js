@@ -59,7 +59,7 @@ class Pizza{
             return sum;
         }, '');
 
-        return this.name.slice(0,1) + extraCode; 
+        return this.name.slice(0,1) + this.size.slice(0,1) + extraCode; 
     }
 
 }

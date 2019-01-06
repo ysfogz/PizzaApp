@@ -28,6 +28,6 @@ class Beverage {
 
     // for OrderItem content
     getCode() {
-        return this.name.slice(0,1);
+        return this.name.slice(0,1) + this.size.slice(0,1);
     }
 }

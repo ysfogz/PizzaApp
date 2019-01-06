@@ -20,7 +20,7 @@ const cola = beverageHelper.getCola();
 const fanta = new Beverage("Fanta", 4);
 const rivella = new Beverage("Rivalle", 4);
 const ayran = new Beverage("Ayran", 4);
-
+/*
 // Rabia hanim 
 const rabiaHanim = new OrderItem(fungi);
 rabiaHanim.getType().addExtra(enginar);
@@ -37,4 +37,4 @@ siparis.addItems(rabiaHanim);
 siparis.addItems(tanerBey);
 siparis.addItems(cemilBeyPizza);
 siparis.addItems(cemilBeyBeverage);
-
+*/
