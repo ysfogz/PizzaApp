@@ -183,7 +183,9 @@ td {
     justify-content: space-between;
     align-items: center;
 }
-
+u {
+    color: rgb(21, 21, 107);
+}
 /* Animation classes */
 
 .anime {

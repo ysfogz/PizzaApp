@@ -55,7 +55,7 @@
         all = all.map(item => {
             return `<li id="${item.getName()}" class="extra-item">
                         <input class="extra-item" type="checkbox" name="e-item" value="${item.getName()}">
-                        ${item.getName()} </input> 
+                        <span>${item.getName()} <u>(${item.getPrice()} chf)</u></span> 
                     </li>`;
         });
         $(".exstra-list").append(all.join("").toString()); 
@@ -73,12 +73,12 @@
         for (let index = 0; index < Object.keys(SIZE).length-1; index++) { 
             allPizza.push(`<li class="size-item"> 
                             <input class="size-item" type="radio" name="psize" value="${index}">
-                            ${Object.keys(SIZE)[index]} - ${SIZE.properties[index].pizza}</input>
+                            <span>${Object.keys(SIZE)[index]} - ${SIZE.properties[index].pizza} </span>
                         </li>`);
     
             allBeverage.push(`<li class="size-item"> 
                                 <input class="size-item" type="radio" name="bsize" value="${index}">
-            ${Object.keys(SIZE)[index]} - ${SIZE.properties[index].beverage}</input>
+                                <span>${Object.keys(SIZE)[index]} - ${SIZE.properties[index].beverage}</span>
                          </li>`);
             
         }
@@ -87,3 +87,23 @@
         $(".beverage-size-list").append(allBeverage.join(''));
     }
     
+    function setPriceList() {
+        $("li.size-item").each(function () {
+            if ($(this).children('input').prop('name') === 'psize') {
+                let id = $(this).closest('.pizza-item').prop('id'); // beverage-item ve extra-item a bak extra ya özellikle bak
+                let val = $(this).children('input').val();
+                let htmlStr = $(this).children('span').html();
+                htmlStr += ` <u>(${PIZZAKIND.properties[PIZZAKIND[id]][SIZE.properties[val].name]} chf)</u>`;
+                $(this).children('span').html(htmlStr);
+                
+            } else if ($(this).children('input').prop('name') === 'bsize') {
+                let id = $(this).closest('.beverage-item').prop('id'); // beverage-item ve extra-item a bak extra ya özellikle bak
+                let val = $(this).children('input').val();
+                let htmlStr = $(this).children('span').html();
+                htmlStr += ` <u>(${BEVERAGEKIND.properties[BEVERAGEKIND[id]][SIZE.properties[val].name]} chf)</u>`;
+                $(this).children('span').html(htmlStr);              
+            }
+
+        });
+        
+    }

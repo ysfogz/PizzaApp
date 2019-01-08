@@ -18,6 +18,7 @@
         setExstraList();
         setBeverageList();
         setSizeList();
+        setPriceList();
 
         setPizzaListListener();
         setBeverageListListener();
