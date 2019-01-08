@@ -87,6 +87,9 @@
         $(".beverage-size-list").append(allBeverage.join(''));
     }
     
+    /**
+     * Sets prices for every orderable item on the page
+     */
     function setPriceList() {
         $("li.size-item").each(function () {
             if ($(this).children('input').prop('name') === 'psize') {
