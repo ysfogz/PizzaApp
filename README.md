@@ -1,3 +1,1 @@
-# PizzaApp
-
-### Contributors
+murat çetin
